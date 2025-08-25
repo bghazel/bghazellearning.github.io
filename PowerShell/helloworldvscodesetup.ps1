@@ -1,0 +1,2 @@
+write-host "I am testing and troubleshooting setting up VSCode with powershell and remote github repo"
+Write-Host "It looks like I cant run and debug powershell commands with remote repo so I will have to clone the repo on each computer."
