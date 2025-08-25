@@ -1,6 +1,5 @@
-# bghazel.github.io
+# Ben Hazel's Learning Repository
 
-Benjamin Hazel
 
 
 # About me
