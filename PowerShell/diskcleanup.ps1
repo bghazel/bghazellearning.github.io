@@ -10,32 +10,30 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 $cleanmgrcheck = $null
 
 cleanmgr /verylowdisk
-#next goal is to have it close automatically so we can run without user interference
 
+#next goal is to have it close automatically so we can run without user interference
 while ($null -eq $cleanmgrcheck) {
    $cleanmgrcheck = Get-Process | Where-Object {$_.MainWindowTitle -eq "Disk Space Notification"} | Select-Object MainWindowTitle
    }
-         Write-Host "this is a test"
+         
 Get-Process | Where-Object {$_.MainWindowTitle -eq "Disk Space Notification"} | Stop-Process -Force
-
+         Write-Host "finished windows disk cleanup"
 
 #Optimize/defrag drive
 Optimize-Volume -DriveLetter C -ReTrim -Defrag
-         Write-Host "finished defrag"
-
+         Write-Host "Finished Defrag/Trim"
 
 #Empty Recycle Bin
 Clear-RecycleBin -Force
-         Write-Host "finished recycle"
-
-
+         Write-Host "Finished Recycle Bin Clear"
 
 #Wise Disk Cleaner // Will want to check for pop up to close it then move on to registry cleaner.
 Start-Process -FilePath "C:\Program Files (x86)\Wise\Wise Disk Cleaner\WiseDiskCleaner.exe" -argumentlist "-a" -wait
+         Write-Host "Finished Wise Disk Cleaner"
 
 #Wise Registry Cleaner
 Start-Process -FilePath "C:\Program Files (x86)\Wise\Wise Registry Cleaner\WiseregCleaner.exe" -argumentlist "-a -safe" -wait
-
+         Write-Host "Finished Wise Registry Cleaner"
 
 
 Read-Host -prompt "Disk Cleanup Complete: Press Enter to exit"
