@@ -27,6 +27,21 @@ Optimize-Volume -DriveLetter C -ReTrim -Defrag
 Clear-RecycleBin -Force
          Write-Host "Finished Recycle Bin Clear"
 
+#Clear Recent Items List
+Remove-Item -Path "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Recent\*" -Force -Recurse
+         Write-Host "Cleared recent Items From This profile"
+
+#Clear Downloads Folder
+$downloadcheck = Read-Host -Prompt "Do you want to clear your downloads folder? Y\N"
+if($downloadcheck -eq "Y"){
+   Remove-Item -Path "$env:USERPROFILE\Downloads\*" -Force -Recurse
+         Write-Host "Cleared the Downloads Folder From this profile"
+}
+else{
+         Write-Host "Skipping over download folder deletion"
+}
+
+
 #Wise Disk Cleaner // Will want to check for pop up to close it then move on to registry cleaner.
 Start-Process -FilePath "C:\Program Files (x86)\Wise\Wise Disk Cleaner\WiseDiskCleaner.exe" -argumentlist "-a" -wait
          Write-Host "Finished Wise Disk Cleaner"
