@@ -8,7 +8,7 @@ $cleanmgrcheck = $null
 cleanmgr /verylowdisk -Wait
 #next goal is to have it close automatically so we can run without user interference
 
-while ($cleanmgrcheck -eq $null) {
+while ($null -eq $cleanmgrcheck) {
    $cleanmgrcheck = Get-Process | Where-Object {$_.MainWindowTitle -eq "Disk Space Notification"} | Select-Object MainWindowTitle
    #Write-Host $cleanmgrcheck
 }
