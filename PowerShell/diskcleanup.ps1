@@ -6,23 +6,21 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
     exit;
 }
 
-
 $cleanmgrcheck = $null
-#Write-Host "checking $cleanmgrcheck"
-
 
 cleanmgr /verylowdisk -Wait
 #next goal is to have it close automatically so we can run without user interference
 
 while ($null -eq $cleanmgrcheck) {
    $cleanmgrcheck = Get-Process | Where-Object {$_.MainWindowTitle -eq "Disk Space Notification"} | Select-Object MainWindowTitle
-   #Write-Host $cleanmgrcheck
-}
-#Write-Host "pre kill"
-   Get-Process | Where-Object {$_.MainWindowTitle -eq "Disk Space Notification"} | Stop-Process -Force
+   }
+
+Get-Process | Where-Object {$_.MainWindowTitle -eq "Disk Space Notification"} | Stop-Process -Force
 
 #Optimize/defrag drive
 Optimize-Volume -DriveLetter C -ReTrim -Defrag
 
+#Empty Recycle Bin
+Clear-RecycleBin -Force
 
 Read-Host -prompt "Disk Cleanup Complete: Press Enter to exit"
