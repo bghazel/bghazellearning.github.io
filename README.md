@@ -18,3 +18,4 @@ This is my github Repository where I am learning powershell and other tools to f
 <br><br>
 8/27/25
 <br>    - I think I'd like to see if I could fit the entire MSP Client: New PC Setup checklist into a script. Or at least see how much I can fit into one. Some of it will probably be less intuitive or slower than just doing it through gui but I'll be able to eliminate those once I find it. I think I'll just go down the checklist and see what I can put into script instead.
+<br>    - Had to switch computers. this is for a test commit to make sure vscode and git are all setup correctly.
