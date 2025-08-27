@@ -10,20 +10,27 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 
 #Check Computer Type
 function compinfo{
-    #$comptype = (get-computerinfo).CsPCSystemType          more simplified comp info
-    $comptype = get-ciminstance -ClassName Win32_SystemEnclosure | Select-Object ChassisTypes
+    $comptype = (get-computerinfo).CsPCSystemType         # more simplified comp info
+    #$comptype = get-ciminstance -ClassName Win32_SystemEnclosure | Select-Object ChassisTypes          More complex computer type info (laptop,desktop,notebook,sff,etc)
     $compmake = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object Manufacturer
     $compmodel = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object Model
     $serialnumber = Get-CimInstance -classname Win32_BIOS | Select-Object SerialNumber
-    if(comptype -eq mobile){
+    $datetime = Get-Date
+    if($comptype -eq "mobile"){
         "Computer Type: Laptop">> C:\ITGlueInfo.txt
-    }
-    if(comptype -eq "desktop"){
+        $comptype = "Laptop"
+      }
+    if($comptype -eq "desktop"){
         "Computer Type: Desktop">> C:\ITGlueInfo.txt
-    }
+        $comptype = "Desktop"
+      }
 }
 
 
 Write-Host "Welcome to the MSP Client: New PC Setup Checklist Script"
-$technician=Read-Host -Prompt "Technician Name:"
+$technician = Read-Host -Prompt "Technician Name:"
     "Technician: $technician" >> C:\ITGlueInfo.txt
+$enduser = Read-Host -Prompt "End Users Name"
+    "End User: $enduser" >> C:\ITGlueInfo.txt
+$compname = Read-Host -Prompt "Desired Computer Name (ORG-##TT ie: PAL-72LT)"
+
