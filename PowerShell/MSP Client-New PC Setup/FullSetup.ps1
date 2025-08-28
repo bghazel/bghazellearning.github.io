@@ -12,7 +12,7 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
     Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath';`"";
     exit;
 }
-    #IT Glue Info TXT
+    #\\\IT Glue Info TXT\\\
 #Defining Variables
 $script:comptype = $null
 $script:compmake = $null
@@ -60,6 +60,9 @@ Write-Host "All information needed to put into IT Glue will be put into ITGluein
 "Username: $enduser" >> C:\ITGlueInfo.txt
 "Password: $password" >> C:\ITGlueInfo.txt
 
+
+
+    #\\\Applying Settings\\\
 #Setting Computer Name
 Rename-Computer -NewName "$compname"
 
@@ -105,7 +108,7 @@ Add-LocalGroupMember -Group "Administrators" -Member "$enduser"             #Add
 
 
 
-    #Cleanup-Tuneup
+    #\\\Cleanup-Tuneup\\\
 #Winget Upgrade
 function wingetupgrade{
 winget upgrade --all --force
