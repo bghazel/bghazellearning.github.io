@@ -61,4 +61,3 @@ powercfg.exe -x -hibernate-timeout-dc 0
 $maintenancepath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"
 Set-ItemProperty -Path $maintenancepath -Name "Activation Boundary" -Value "2001-01-01T02:00:00"
 
-#Create End User Profile
