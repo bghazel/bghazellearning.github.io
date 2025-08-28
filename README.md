@@ -23,3 +23,4 @@ This is my github Repository where I am learning powershell and other tools to f
 <br><br>
 8/28/25
 <br>    - Did a first pass with the Setcompsettings script. Does the majority of them now. Learned about loading a reg profile to be able to regedit settings for users other than the one logged in. Created the fullsetup script that has everything so far for replacing out IT Glue new client setup checklist. Still a while to go but the next goal is to try and get applications installed through powershell.
+<br>    -Got started on a script for installing everything. Started that out with installing our RMM. Learned about the switch statement to replace having a million ifs. Fell into this because the else statement was always being triggered and wasn't sure why. I think it associates with the most recent if? 

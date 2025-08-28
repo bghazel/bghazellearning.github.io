@@ -44,7 +44,7 @@ function compinfo{
 Write-Host "Welcome to the MSP Client: New PC Setup Checklist Script"
 Write-Host "All information needed to put into IT Glue will be put into ITGlueinfo.txt in the C Drive"
   $technician = Read-Host -Prompt "Technician Name:"
-  $enduser = Read-Host -Prompt "End Users Name"
+  $script:enduser = Read-Host -Prompt "End Users Name"
   $password = Read-Host -Prompt "End Users Password"
   $compname = Read-Host -Prompt "Desired Computer Name (ORG-##TT ie: PAL-72LT)"
 
@@ -52,27 +52,27 @@ Write-Host "All information needed to put into IT Glue will be put into ITGluein
   compinfo
 
 #Writing to file
-"Title: MSP Client: New PC Setup - <$compname> - <$enduser>" >> C:\ITGlueInfo.txt
+"Title: MSP Client: New PC Setup - <$compname> - <$script:enduser>" >> C:\ITGlueInfo.txt
 "Technician: $technician" >> C:\ITGlueInfo.txt
-"End User: $enduser" >> C:\ITGlueInfo.txt
+"End User: $script:enduser" >> C:\ITGlueInfo.txt
 "Date Setup Started $datetime" >> C:\ITGlueInfo.txt
 "Computer Type: $comptype" >> C:\ITGlueinfo.txt
 "Computer Info: Make: $compmake, Model: $compmodel, Serial Number: $serialnumber" >> C:\ITGlueInfo.txt
 "Computer Name: $compname" >> C:\ITGlueInfo.txt
-"Username: $enduser" >> C:\ITGlueInfo.txt
+"Username: $script:enduser" >> C:\ITGlueInfo.txt
 "Password: $password" >> C:\ITGlueInfo.txt
 
 
 
     #\\\Applying Settings\\\
 #Create User Profile
-New-LocalUser -Name "$enduser" -Password "$password" -Description "$enduser's Profile"
-Add-LocalGroupMember -Group "Administrators" -Member "$enduser"             #Adding as admin
+New-LocalUser -Name "$script:enduser" -Password "$password" -Description "$script:enduser's Profile"
+Add-LocalGroupMember -Group "Administrators" -Member "$script:enduser"             #Adding as admin
 
 #Reg Load
-$tempsid = Get-WmiObject Win32_UserAccount -Filter "Name = '$enduser'"
+$tempsid = Get-WmiObject Win32_UserAccount -Filter "Name = '$script:enduser'"
 $sid = $tempsid.sid
-$regloadpath = "C:\Users\$enduser\NTUSER.DAT"
+$regloadpath = "C:\Users\$script:enduser\NTUSER.DAT"
 
 if ($null -eq $sid) {
         Write-Host "Failed to Pull User SID"
@@ -86,7 +86,7 @@ Rename-Computer -NewName "$compname"
 
 #Setting Computer Description to "FirstName Lastname's Desk/laptop"
 $tempdesc = Get-CimInstance -ClassName Win32_OperatingSystem
-        $tempdesc.Description = "$($enduser)'s $comptype "
+        $tempdesc.Description = "$($script:enduser)'s $comptype "
         Set-CimInstance -InputObject $tempdesc
 Write-Host "Computer Name Change will be applied on next restart"
 

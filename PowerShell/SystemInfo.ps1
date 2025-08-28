@@ -1,4 +1,4 @@
-#The plan for this one is to try and replace the system info application we use to pull all the info about a computer into a txt file. I'm think that Get-ComputerInfo might do the trick
+#The goal for this one is to try and replace the system info application we use to pull all the info about a computer into a txt file. I'm think that Get-ComputerInfo might do the trick
 
 #found a command to make a self elevating script to bypass admin. Just seems to check if current user has the admin role. then does the verb runas admin command. This might be a good default header??
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
