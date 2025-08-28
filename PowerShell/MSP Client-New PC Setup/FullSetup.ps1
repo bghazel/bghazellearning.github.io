@@ -12,6 +12,8 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
     Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath';`"";
     exit;
 }
+
+
     #\\\IT Glue Info TXT\\\
 #Defining Variables
 $script:comptype = $null
@@ -63,6 +65,22 @@ Write-Host "All information needed to put into IT Glue will be put into ITGluein
 
 
     #\\\Applying Settings\\\
+#Create User Profile
+New-LocalUser -Name "$enduser" -Password "$password" -Description "$enduser's Profile"
+Add-LocalGroupMember -Group "Administrators" -Member "$enduser"             #Adding as admin
+
+#Reg Load
+$tempsid = Get-WmiObject Win32_UserAccount -Filter "Name = '$enduser'"
+$sid = $tempsid.sid
+$regloadpath = "C:\Users\$enduser\NTUSER.DAT"
+
+if ($null -eq $sid) {
+        Write-Host "Failed to Pull User SID"
+}
+else {
+        reg load "HKU\$sid" "$regloadpath"
+}
+
 #Setting Computer Name
 Rename-Computer -NewName "$compname"
 
@@ -102,9 +120,6 @@ powercfg.exe -x -hibernate-timeout-dc 0
 $maintenancepath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"
 Set-ItemProperty -Path $maintenancepath -Name "Activation Boundary" -Value "2001-01-01T02:00:00"
 
-#Create User Profile
-New-LocalUser -Name "$enduser" -Password "$password" -Description "$enduser's Profile"
-Add-LocalGroupMember -Group "Administrators" -Member "$enduser"             #Adding as admin
 
 
 
@@ -215,6 +230,8 @@ $functionselection = Read-Host -Prompt "Would you Like to perform the Cleanup/Tu
       PCInfotxt
    }
    Write-Host "" #Used to break up the repeats
+#Reg Unload
+reg unload "HKU\$sid" "$regloadpath"
 
 
 Read-Host -Prompt "Thank you for using Ben's TechWizard MSP Client PC Setup Script (Press Enter to Exit)"
