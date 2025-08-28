@@ -1,4 +1,11 @@
+#WIP as of 8/28/25
 #The goal of this script is to combine the various cleanup/setup and settings changing scripts into one that should knock out a large # of the steps in our setup checklist.
+<#Script Functions include, Automatically aquiring system information and creating an a copy paste for itglue + PCinfo txt file in C: Drive, 
+Applying our standard windows settings(Comp Name, Comp Description, Disabling Bitlocker, Setting UAC, Disabling Show more Options, Applying Power Settings, Scheduling Windows Auto Maintenence and creating the User Profile)
+Performing Our Cleanup/Tuneup Process including winget and windows updates, diskcleanup(w/wise cleaners), SFC/Dism Scanes.
+#>
+
+
 
 #Self Elevate
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
@@ -98,3 +105,113 @@ Add-LocalGroupMember -Group "Administrators" -Member "$enduser"             #Add
 
 
 
+    #Cleanup-Tuneup
+#Winget Upgrade
+function wingetupgrade{
+winget upgrade --all --force
+Install-Module PSWindowsUpdate -Force
+Get-WindowsUpdate
+Install-WindowsUpdat
+}
+
+#Disk Cleanup
+function diskcleanup{
+         Write-Host "Starting Disk Cleanup Function"
+
+$cleanmgrcheck = $null
+
+$downloadcheck = Read-Host -Prompt "Do you want to clear your downloads folder? Y\N"
+
+cleanmgr /verylowdisk
+while ($null -eq $cleanmgrcheck) {
+   #Closes the popup automatically
+   $cleanmgrcheck = Get-Process | Where-Object {$_.MainWindowTitle -eq "Disk Space Notification"} | Select-Object MainWindowTitle
+   }
+         
+Get-Process | Where-Object {$_.MainWindowTitle -eq "Disk Space Notification"} | Stop-Process -Force
+         Write-Host "finished windows disk cleanup"
+
+#Optimize/defrag drive
+Optimize-Volume -DriveLetter C -ReTrim -Defrag
+         Write-Host "Finished Defrag/Trim"
+
+#Empty Recycle Bin
+Clear-RecycleBin -Force
+         Write-Host "Finished Recycle Bin Clear"
+
+#Clear Recent Items List
+Remove-Item -Path "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Recent\*" -Force -Recurse
+         Write-Host "Cleared recent Items From This profile"
+
+#Clear Downloads Folder
+if($downloadcheck -eq "Y"){
+   Remove-Item -Path "$env:USERPROFILE\Downloads\*" -Force -Recurse
+         Write-Host "Cleared the Downloads Folder From this profile"
+}
+else{
+         Write-Host "Skipping over download folder deletion"
+}
+
+
+#Wise Disk Cleaner // Will want to check for pop up to close it then move on to registry cleaner.
+         Write-Host "Starting Wise Disk Cleaner. Please Wait..."
+Start-Process -FilePath "C:\Program Files (x86)\Wise\Wise Disk Cleaner\WiseDiskCleaner.exe" -argumentlist "-a" -wait
+         Write-Host "Finished Wise Disk Cleaner"
+
+#Wise Registry Cleaner
+         Write-Host "Starting Wise Registry Cleaner. Please Wait..."
+Start-Process -FilePath "C:\Program Files (x86)\Wise\Wise Registry Cleaner\WiseregCleaner.exe" -argumentlist "-a -safe" -wait
+         Write-Host "Finished Wise Registry Cleaner"
+
+
+Write-Host "Disk Cleanup Complete"
+
+}
+
+#DISM // SFC Scans
+function sfcdism {
+
+         Write-Host "Starting SFC/DISM Function"
+
+#Start-Process -FilePath "dism.exe" -ArgumentList "/online /cleanup-image /restorehealth" -Wait -Verb RunAs
+
+Start-Process -FilePath "${env:Windir}\System32\SFC.EXE" -ArgumentList "/scannow"  -Wait -Verb RunAs
+
+Write-Host "DISM\SFC Corruption Scans have finished running."
+}
+
+#Create PCInfo File
+function PCInfotxt{
+      
+         Write-Host "Creating PCInfo File in C:\ Drive"
+
+    #most pertinent info to access
+
+"Quick Access Information" >> C:\pcinfo.txt
+Get-ComputerInfo -Property CSName,CSModel,OsName,WindowsInstallDateFromRegistry | Format-List >> C:\pcinfo.txt
+Get-WmiObject win32_bios | Select-Object SerialNumber >> C:\pcinfo.txt
+"IP:Address " >> C:\pcinfo.txt ;"----------" >> C:\pcinfo.txt
+(@(Get-WmiObject Win32_NetworkAdapterConfiguration | Select-Object -ExpandProperty IPAddress) -like "*.*") >> C:\pcinfo.txt
+"">>C:\pcinfo.txt ; "Date Configured" >> C:\pcinfo.txt ; "----------" >> C:\pcinfo.txt ; get-date >> C:\pcinfo.txt
+"Hard Drive Information" >> C:\pcinfo.txt ; get-volume >> C:\pcinfo.txt
+"Installed Applications" >> C:\pcinfo.txt ; Get-Package >> C:\pcinfo.txt
+
+   #Just straight sysinfo command. Harder to parse but more information
+"Further Information" >> C:\pcinfo.txt
+systeminfo >> C:\pcinfo.txt
+}  
+
+
+
+   
+$functionselection = Read-Host -Prompt "Would you Like to perform the Cleanup/Tuneup script? [Winget and Windows Updates, Disk Cleanup, SFC/DISM, PCInfo Text File Creation](Y/N)"
+   if ($functionselection -eq "Y") {
+      wingetupgrade
+      diskcleanup
+      sfcdism
+      PCInfotxt
+   }
+   Write-Host "" #Used to break up the repeats
+
+
+Read-Host -Prompt "Thank you for using Ben's TechWizard MSP Client PC Setup Script (Press Enter to Exit)"
