@@ -30,11 +30,11 @@ function compinfo{
     $script:compmodel = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object Model
     $script:serialnumber = Get-CimInstance -classname Win32_BIOS | Select-Object SerialNumber
     $script:datetime = Get-Date
-    if($comptype -eq "mobile"){
-        $comptype = "Laptop"
+    if($script:comptype -eq "mobile"){
+        $script:comptype = "Laptop"
       }
-    if($comptype -eq "desktop"){
-        $comptype = "Desktop"
+    if($script:comptype -eq "desktop"){
+        $script:comptype = "Desktop"
       }
 }
 
@@ -45,7 +45,7 @@ Write-Host "Welcome to the MSP Client: New PC Setup Checklist Script"
 Write-Host "All information needed to put into IT Glue will be put into ITGlueinfo.txt in the C Drive"
   $technician = Read-Host -Prompt "Technician Name:"
   $script:enduser = Read-Host -Prompt "End Users Name"
-  $password = Read-Host -Prompt "End Users Password"
+  $password = Read-Host -Prompt "End Users Password" -AsSecureString
   $compname = Read-Host -Prompt "Desired Computer Name (ORG-##TT ie: PAL-72LT)"
 
 #Call Function
@@ -56,15 +56,19 @@ Write-Host "All information needed to put into IT Glue will be put into ITGluein
 "Technician: $technician" >> C:\ITGlueInfo.txt
 "End User: $script:enduser" >> C:\ITGlueInfo.txt
 "Date Setup Started $datetime" >> C:\ITGlueInfo.txt
-"Computer Type: $comptype" >> C:\ITGlueinfo.txt
+"Computer Type: $script:comptype" >> C:\ITGlueinfo.txt
 "Computer Info: Make: $compmake, Model: $compmodel, Serial Number: $serialnumber" >> C:\ITGlueInfo.txt
 "Computer Name: $compname" >> C:\ITGlueInfo.txt
 "Username: $script:enduser" >> C:\ITGlueInfo.txt
 "Password: $password" >> C:\ITGlueInfo.txt
 
+#Removing anything after first space in enduser.
+$script:enduser = ($script:enduser -split ' ', 2)[0]
+
 
 
     #\\\Applying Settings\\\
+  function Applysettings {
 #Create User Profile
 New-LocalUser -Name "$script:enduser" -Password "$password" -Description "$script:enduser's Profile"
 Add-LocalGroupMember -Group "Administrators" -Member "$script:enduser"             #Adding as admin
@@ -120,16 +124,38 @@ powercfg.exe -x -hibernate-timeout-dc 0
 $maintenancepath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"
 Set-ItemProperty -Path $maintenancepath -Name "Activation Boundary" -Value "2001-01-01T02:00:00"
 
+#Logon Disclaimer
+$logdiscpath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+Set-ItemProperty -Path $logdiscpath -Name "legalnoticecaption" -Value "Important Message From Tech Wizards"
+Set-ItemProperty -Path $logdiscpath -Name "legalnoticetext" -Value "ALL COMPUTERS SHOULD ALWAYS BE KEPT POWERED ON WHENEVER POSSIBLE.  You can log out of Windows, but never Shut Down your computer overnight or over a weekend.  Tech Wizards performs automated and manual maintenance procedures and updates to your computer during evening and weekend hours, and if your computer is powered down, asleep, or in hibernation mode then we cannot perform these functions to keep your PC running at optimal performance and maximum speed.  Your monitor will automatically go dark after 15 minutes of computer inactivity.  Move your mouse or press any key to return to the Windows Desktop.  After 30 minutes of inactivity, you will need to enter your computer password (or PIN) to return to the Windows Desktop. You can power off your monitor if you want to, but there is no need to do so.  If this is a laptop computer, it is understood that this is a mobile device. Obviously, it will not always be powered on and connected to the Internet, especially when it is in transit.  But whenever possible, please keep your laptop plugged in, awake, and connected to the Internet so we can perform important maintenance and update procedures.  Thank you for helping Tech Wizards keep your company's network and computers working efficiently."
 
+  }
+  
+  
+  #\\\Cleanup-Tuneup\\\
+#Install winget                   \\\\\\\\\\\\\\\\\\\\ADD IF TO CHECK IF INSTALLED\\\\\\\\\\\\\\\\\\\\
+function wingetinstall{
+    # Get the download URL of the latest winget installer from GitHub:
+$API_URL = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+$DOWNLOAD_URL = $(Invoke-RestMethod $API_URL).assets.browser_download_url |
+    Where-Object {$_.EndsWith(".msixbundle")}
 
+    # Download the installer:
+Invoke-WebRequest -URI $DOWNLOAD_URL -OutFile winget.msixbundle -UseBasicParsing
 
-    #\\\Cleanup-Tuneup\\\
+    # Install winget:
+Add-AppxPackage winget.msixbundle
+
+    # Remove the installer:
+Remove-Item winget.msixbundle
+}
+
 #Winget Upgrade
 function wingetupgrade{
 winget upgrade --all --force
 Install-Module PSWindowsUpdate -Force
 Get-WindowsUpdate
-Install-WindowsUpdat
+Install-WindowsUpdate
 }
 
 #Disk Cleanup
@@ -231,7 +257,7 @@ $functionselection = Read-Host -Prompt "Would you Like to perform the Cleanup/Tu
    }
    Write-Host "" #Used to break up the repeats
 #Reg Unload
-reg unload "HKU\$sid" "$regloadpath"
+reg unload "HKU\$sid"
 
 
 Read-Host -Prompt "Thank you for using Ben's TechWizard MSP Client PC Setup Script (Press Enter to Exit)"

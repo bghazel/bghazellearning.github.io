@@ -126,16 +126,52 @@ if($bkg){
 
 }
 
+#Install Winget
+
+function wingetinstall{
+    # Get the download URL of the latest winget installer from GitHub:
+$API_URL = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+$DOWNLOAD_URL = $(Invoke-RestMethod $API_URL).assets.browser_download_url |
+    Where-Object {$_.EndsWith(".msixbundle")}
+
+    # Download the installer:
+Invoke-WebRequest -URI $DOWNLOAD_URL -OutFile winget.msixbundle -UseBasicParsing
+
+    # Install winget:
+Add-AppxPackage winget.msixbundle
+
+    # Remove the installer:
+Remove-Item winget.msixbundle
+}
+
 #App install through Winget
 function standardwinget{
 
+    winget install --id=Google.Chrome -e --accept-package-agreements --accept-source-agreements
+    winget install --id=Zoom.Zoom -e --accept-package-agreements --accept-source-agreements
+    winget install --id=WiseCleaner.WiseDiskCleaner -e --accept-package-agreements --accept-source-agreements
+    winget install --id=WiseCleaner.WiseRegistryCleaner -e --accept-package-agreements --accept-source-agreements
+    winget install --id=voidtools.Everything -e --accept-package-agreements --accept-source-agreements
+    winget install --id=Greenshot.Greenshot -e --accept-package-agreements --accept-source-agreements
+    winget install --id=Open-Shell.Open-Shell-Menu -e --accept-package-agreements --accept-source-agreements
+    winget install --id=VideoLAN.VLC -e --accept-package-agreements --accept-source-agreements
+    winget install --id=Foxit.FoxitReader -e --accept-package-agreements --accept-source-agreements
+    winget install --id=Google.EarthPro -e --accept-package-agreements --accept-source-agreements
 }
 
 #App install through Permanent URLS
 function standardweb{
+    #BrandOS
+    invoke-Webrequest -uri "http://208.106.176.175/BrandOS.zip" -OutFile "C:\Users\$($script:enduser)\Downloads\BrandOS.zip"
+
+    #M365 w/ Classic Outlook
+    $exePackageToInstall = "C:\Users\$($script:enduser)\Downloads\OfficeSetup.exe"  
+    $arguments = "/quiet" 
+    invoke-Webrequest -uri "https://go.microsoft.com/fwlink/?linkid=2276500&clcid=0x409" -OutFile $exePackageToInstall
+    Start-Process -FilePath $exePackageToInstall -ArgumentList $arguments -Wait
 
 }
 
-VSAbkg
+
 Read-Host -Prompt "asdf"
 
