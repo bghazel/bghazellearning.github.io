@@ -18,6 +18,39 @@ else {
         reg load "HKU\$sid" "$regloadpath"
 }
 
+#Set Default Task Bar  ||||||||||||||||||||||||||||||||Must be done before user creation|||||||||||||||||||||||
+$xmlstring = @"
+<?xml version="1.0" encoding="utf-8"?>
+<LayoutModificationTemplate
+    xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification"
+    xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout"
+    xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout"
+    xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout"
+    Version="1">
+  <CustomTaskbarLayoutCollection PinListPlacement="Replace">
+    <defaultlayout:TaskbarLayout>
+      <taskbar:TaskbarPinList>
+        <taskbar:UWA AppUserModelID="MicrosoftCorporationII.QuickAssist_8wekyb3d8bbwe!App" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="Microsoft.Windows.Explorer" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="Chrome" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="MSEdge" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="308046B0AF4A39CB" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="Microsoft.Office.OUTLOOK.EXE.15" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="Microsoft.Office.EXCEL.EXE.15" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="Microsoft.Office.WINWORD.EXE.15" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="MSTeams_8wekyb3d8bbwe!MSTeams" PinGeneration="1"/>
+
+      </taskbar:TaskbarPinList>
+    </defaultlayout:TaskbarLayout>
+  </CustomTaskbarLayoutCollection>
+</LayoutModificationTemplate>
+
+"@
+
+$xmldoc = New-Object System.Xml.XmlDocument
+$xmldoc.LoadXml($xmlstring)
+$outputpath = "C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\LayoutModification.xml"
+$xmldoc.Save($outputpath)
 
 
 #Auto Set Time Zone Based on Location
@@ -92,6 +125,11 @@ $value = "0"
 Set-ItemProperty -Path $registryPath -Name $Al -Value $value -PropertyType DWORD -Force -ErrorAction Ignore
 Set-ItemProperty -Path $userregpath -Name $Al -Value $value -PropertyType DWORD -Force -ErrorAction Ignore
 
+#Stop Widget Popup
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force
+Set-ItemProperty -Path "HKU:\$($sid)\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force
+
+
 #Unload
 reg load "HKU\$sid" "$regloadpath"
 
@@ -99,6 +137,5 @@ reg load "HKU\$sid" "$regloadpath"
 #####################################################################################################[WIP] NOT ADDED TO FULL SETUP SCRIPT###########################################################################################################################
 
 #need to add end user registry change to the full script.
-
 
 

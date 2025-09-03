@@ -72,6 +72,40 @@ $script:enduser = ($script:enduser -split ' ', 2)[0]
 
     #\\\Applying Settings\\\
 function Applysettings {
+#Set Default Task Bar  ||||||||||||||||||||||||||||||||Must be done before user creation|||||||||||||||||||||||
+$xmlstring = @"
+<?xml version="1.0" encoding="utf-8"?>
+<LayoutModificationTemplate
+    xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification"
+    xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout"
+    xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout"
+    xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout"
+    Version="1">
+  <CustomTaskbarLayoutCollection PinListPlacement="Replace">
+    <defaultlayout:TaskbarLayout>
+      <taskbar:TaskbarPinList>
+        <taskbar:UWA AppUserModelID="MicrosoftCorporationII.QuickAssist_8wekyb3d8bbwe!App" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="Microsoft.Windows.Explorer" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="Chrome" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="MSEdge" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="308046B0AF4A39CB" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="Microsoft.Office.OUTLOOK.EXE.15" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="Microsoft.Office.EXCEL.EXE.15" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="Microsoft.Office.WINWORD.EXE.15" PinGeneration="1"/>
+        <taskbar:DesktopApp DesktopApplicationID="MSTeams_8wekyb3d8bbwe!MSTeams" PinGeneration="1"/>
+
+      </taskbar:TaskbarPinList>
+    </defaultlayout:TaskbarLayout>
+  </CustomTaskbarLayoutCollection>
+</LayoutModificationTemplate>
+
+"@
+
+$xmldoc = New-Object System.Xml.XmlDocument
+$xmldoc.LoadXml($xmlstring)
+$outputpath = "C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\LayoutModification.xml"
+$xmldoc.Save($outputpath)
+
 #Create and Initialize User Profile
 New-LocalUser -Name "$script:enduser" -Password $script:password -Description "$script:enduser's Profile"
 Add-LocalGroupMember -Group "Administrators" -Member "$script:enduser"             #Adding as admin
@@ -156,6 +190,10 @@ $logdiscpath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
 Set-ItemProperty -Path $logdiscpath -Name "legalnoticecaption" -Value "Important Message From Tech Wizards"
 Set-ItemProperty -Path $logdiscpath -Name "legalnoticetext" -Value "ALL COMPUTERS SHOULD ALWAYS BE KEPT POWERED ON WHENEVER POSSIBLE.  You can log out of Windows, but never Shut Down your computer overnight or over a weekend.  Tech Wizards performs automated and manual maintenance procedures and updates to your computer during evening and weekend hours, and if your computer is powered down, asleep, or in hibernation mode then we cannot perform these functions to keep your PC running at optimal performance and maximum speed.  Your monitor will automatically go dark after 15 minutes of computer inactivity.  Move your mouse or press any key to return to the Windows Desktop.  After 30 minutes of inactivity, you will need to enter your computer password (or PIN) to return to the Windows Desktop. You can power off your monitor if you want to, but there is no need to do so.  If this is a laptop computer, it is understood that this is a mobile device. Obviously, it will not always be powered on and connected to the Internet, especially when it is in transit.  But whenever possible, please keep your laptop plugged in, awake, and connected to the Internet so we can perform important maintenance and update procedures.  Thank you for helping Tech Wizards keep your company's network and computers working efficiently."
 
+#Stop Widget Popup
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force
+Set-ItemProperty -Path "HKU:\$($sid)\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force
+
 }
   
   
@@ -182,7 +220,7 @@ function wingetupgrade{
 winget upgrade --all --force
 Install-Module PSWindowsUpdate -Force
 Get-WindowsUpdate
-Install-WindowsUpdate
+Install-WindowsUpdate -AcceptAll
 }
 
 #Disk Cleanup
