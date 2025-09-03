@@ -83,6 +83,15 @@ powercfg.exe -x -hibernate-timeout-dc 0
 $maintenancepath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"
 Set-ItemProperty -Path $maintenancepath -Name "Activation Boundary" -Value "2001-01-01T02:00:00"
 
+#Taskbar Settings
+$registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+$userregpath = "HKU:\$($sid)\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+$Al = "TaskbarAl" # Shift Start Menu Left 
+$value = "0"
+
+Set-ItemProperty -Path $registryPath -Name $Al -Value $value -PropertyType DWORD -Force -ErrorAction Ignore
+Set-ItemProperty -Path $userregpath -Name $Al -Value $value -PropertyType DWORD -Force -ErrorAction Ignore
+
 #Unload
 reg load "HKU\$sid" "$regloadpath"
 
@@ -92,4 +101,4 @@ reg load "HKU\$sid" "$regloadpath"
 #need to add end user registry change to the full script.
 
 
-#Taskbar Settings
+

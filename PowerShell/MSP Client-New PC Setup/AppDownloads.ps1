@@ -122,6 +122,17 @@ if ($url) {
 }
 if($bkg){
     Invoke-WebRequest -Uri $bkg -OutFile "C:\Users\$($script:enduser)\Downloads\wallpaper.bmp"
+
+    #Set Wallpaper
+    $wallpaperPath = "C:\Users\$($script:enduser)\Downloads\wallpaper.bmp"
+
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\" -Name "WallPaper" -Value $wallpaperPath
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\" -Name "WallpaperStyle" -Value 0
+    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\" -Name "TileWallpaper" -Value 0
+        # Refresh the desktop to apply the changes without rebooting
+    RUNDLL32.EXE user32.dll, UpdatePerUserSystemParameters 1, True
+
+    
 }
 
 }
