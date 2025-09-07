@@ -1,0 +1,26 @@
+
+
+
+/* setting class selector for each section type*/
+.timeplace {
+    font-size: 10px;
+    color: grey;
+}
+
+.jtitle{
+    font-size: 13.5px;
+}
+
+.pinfo{
+    font-size: 10px;
+    text-align: center;
+}
+
+.sectionh{
+    font-weight: 900;
+    font-size: 18px;
+}
+
+.bulletp{
+    font-size: 12px;
+}
