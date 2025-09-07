@@ -138,4 +138,6 @@ reg load "HKU\$sid" "$regloadpath"
 
 #need to add end user registry change to the full script.
 
+#Set Defaults
+
 
