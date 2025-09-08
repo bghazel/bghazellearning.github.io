@@ -1,6 +1,6 @@
 # Ben Hazel's Learning Repository
 
-This is my github Repository where I am learning powershell and other tools to further my IT Career. In this read me will be a log of my goals.
+This is my github Repository where I am learning powershell and other tools to further my IT Career. In this read me will be a log of my goals. This is mostly for me to keep track of what I learned and be able to look back on to see my progress.
 
 # Progress Log
 
