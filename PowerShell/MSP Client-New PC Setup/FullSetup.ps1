@@ -55,7 +55,7 @@ Write-Host "All information needed to put into IT Glue will be put into ITGluein
 "Title: MSP Client: New PC Setup - <$compname> - <$script:enduser>" >> C:\ITGlueInfo.txt
 "Technician: $technician" >> C:\ITGlueInfo.txt
 "End User: $script:enduser" >> C:\ITGlueInfo.txt
-"Date Setup Started $datetime" >> C:\ITGlueInfo.txt
+"Date Setup Started $script:datetime" >> C:\ITGlueInfo.txt
 "Computer Type: $script:comptype" >> C:\ITGlueinfo.txt
 "Computer Info: Make: $compmake, Model: $compmodel, Serial Number: $serialnumber" >> C:\ITGlueInfo.txt
 "Computer Name: $compname" >> C:\ITGlueInfo.txt
