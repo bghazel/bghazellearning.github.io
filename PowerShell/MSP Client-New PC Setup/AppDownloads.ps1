@@ -119,6 +119,7 @@ switch ($script:company) {
 # Run the download if a URL was set
 if ($url) {
     Invoke-WebRequest -Uri $url -OutFile "C:\Users\$($script:enduser)\Downloads\VSAInstaller.msi"
+    Start-Process -FilePath "C:\Users\$($script:enduser)\Downloads\VSAInstaller.msi"
 }
 if($bkg){
     Invoke-WebRequest -Uri $bkg -OutFile "C:\Users\$($script:enduser)\Downloads\wallpaper.bmp"
