@@ -34,7 +34,9 @@ This is my github Repository where I am learning powershell and other tools to f
 9/8/25 
 <br>    - Bit of a pivot over the weekend and today. Wanted to try my hand working on the [Cloud Resume Challenge](https://cloudresumechallenge.dev/docs/the-challenge/azure/). That means a shift to trying out html/css. It recommends trying to put your own resume onto a site through azure. So to start I needed to transfer my old resume into an HTML file. Sorted that out and installed a live preview add on to view it.
 <br>    -Had to adjust the file to be mostly divs, to handle the new CSS files components. Probably couldve handled it differently but having a bunch of divs with custom named classes felt the most familiar to me. Added some formatting to make it look just like my google doc/pdf version. Maybe I can improve on it. Was pretty neat to give the basics of html a try though, probably gonna fiddle around with it to see what I can't make more interactive or eye catching for when the day comes that I need to start applying with it. Now that I've got a basic webpage with the resume, next up is to figure out how to publicly host it off of azure.
-
 <br><br>
 9/9/25
 <br>    - I deployed my resume to a static azure blob. When heading to do the CDN step it looks like the CRC site might be out of date? as the Azure CDN is going to be deprecated and doesn't allow creation of new profiles. Looks like I could go with the azure web app route but I am unsure if that goes against the nature of the challenge by simplifying things and reducing what I would learn. Here is my [resume website] (https://bghcloudresumesite.z13.web.core.windows.net/) 
+<br><br>
+9/10/25
+<br>    - Made a new folder for my just for fun scripts. I figure it also counts as learning even if not particularly relevant to my job. Just made 2 scripts using AHK and converted them to exe. All they do is listen for a keystroke then play a beep after a certain amount of time. Just something I thought of for use in an old game I play.
