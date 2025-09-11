@@ -466,7 +466,7 @@ function standardweb{
 
 
 
-
+<#
    
 $functionselection = Read-Host -Prompt "Would you Like to perform the Cleanup/Tuneup script? [Winget and Windows Updates, Disk Cleanup, SFC/DISM, PCInfo Text File Creation](Y/N)"
    if ($functionselection -eq "Y") {
@@ -478,8 +478,18 @@ $functionselection = Read-Host -Prompt "Would you Like to perform the Cleanup/Tu
    Write-Host "" #Used to break up the repeats
 
 
+#>
 
-
+#Call Functions
+Applysettings
+VSAbkg
+wingetinstall
+standardwinget
+standardweb
+wingetupgrade
+diskcleanup
+sfcdism
+PCInfotxt
 
 
 #Reg Unload
