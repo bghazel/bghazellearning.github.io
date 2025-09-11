@@ -4,8 +4,9 @@
 Applying our standard windows settings(Comp Name, Comp Description, Disabling Bitlocker, Setting UAC, Disabling Show more Options, Applying Power Settings, Scheduling Windows Auto Maintenence and creating the User Profile)
 Performing Our Cleanup/Tuneup Process including winget and windows updates, diskcleanup(w/wise cleaners), SFC/Dism Scanes.
 #>
+Start-Transcript -Path "C:\SetupLogs\SetupTranscript.log" -Append
 
-
+Write-Host "TEST1"
 
 #Self Elevate
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
@@ -13,7 +14,7 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
     exit;
 }
 
-
+Write-Host "TEST2"
     #\\\IT Glue Info TXT\\\
 #Defining Variables
 $script:comptype = $null
@@ -39,7 +40,7 @@ function compinfo{
 }
 
 
-
+Write-Host "TEST3"
 #Required Inputs
 Write-Host "Welcome to the MSP Client: New PC Setup Checklist Script"
 Write-Host "All information needed to put into IT Glue will be put into ITGlueinfo.txt in the C Drive"
@@ -50,7 +51,7 @@ Write-Host "All information needed to put into IT Glue will be put into ITGluein
 
 #Call Function
   compinfo
-
+Write-Host "TEST4"
 #Writing to file
 "Title: MSP Client: New PC Setup - <$compname> - <$script:enduser>" >> C:\ITGlueInfo.txt
 "Technician: $technician" >> C:\ITGlueInfo.txt
@@ -64,7 +65,7 @@ Write-Host "All information needed to put into IT Glue will be put into ITGluein
     [Runtime.InteropServices.Marshal]::SecureStringToBSTR($script:password)
   )
 "Password: $unsecurePassword" >> C:\ITGlueInfo.txt
-
+Write-Host "TEST5"
 #Removing anything after first space in enduser.
 $script:enduser = ($script:enduser -split ' ', 2)[0]
 
@@ -482,13 +483,21 @@ $functionselection = Read-Host -Prompt "Would you Like to perform the Cleanup/Tu
 
 #Call Functions
 Applysettings
+Write-Host "TEST6"
 VSAbkg
+Write-Host "TEST7"
 wingetinstall
+Write-Host "TEST8"
 standardwinget
+Write-Host "TEST9"
 standardweb
+Write-Host "TEST10"
 wingetupgrade
+Write-Host "TEST11"
 diskcleanup
+Write-Host "TEST12"
 sfcdism
+Write-Host "TEST13"
 PCInfotxt
 
 
@@ -498,3 +507,16 @@ if (Test-Path "HKU\$sid") {
 }
 
 Read-Host -Prompt "Thank you for using Ben's TechWizard MSP Client PC Setup Script (Press Enter to Exit)"
+Stop-Transcript
+
+
+
+#NOTES
+ # initializing the new users profile did not work. So regedit settings didnt activate
+    # Seperate out HKLM and HKU/$sid regedits. 
+    #make another file just for the HKU regedits incase it fails
+    # Have a check for initialized profile (Check for the folder creation?
+# add txt file for needed commands to run (instructions)
+# add a check for if on wifi
+# Nuget update to do windows updates??
+# Add auto run to the VSA Download.
