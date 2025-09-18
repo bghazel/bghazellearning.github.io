@@ -40,3 +40,6 @@ This is my github Repository where I am learning powershell and other tools to f
 <br><br>
 9/10/25
 <br>    - Made a new folder for my just for fun scripts. I figure it also counts as learning even if not particularly relevant to my job. Just made 2 scripts using AHK and converted them to exe. All they do is listen for a keystroke then play a beep after a certain amount of time. Just something I thought of for use in an old game I play.
+<br><br>
+9/18/25
+<br>    - Been real busy at work so side projects had to be benched for a while. Did a bit of work today and found a way to add a check for internet connection. Should stop the script before anything else happens unless the computer is connected to internet. Should make it so no errors happen due to lack of internet connection(like failed downloads)

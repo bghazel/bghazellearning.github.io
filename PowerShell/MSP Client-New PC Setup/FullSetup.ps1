@@ -23,6 +23,18 @@ $script:compmodel = $null
 $script:serialnumber = $null
 $script:datetime = $null
 
+#Internet Connection Check
+$wifi = Get-NetAdapter | Where-Object {$_.Status -eq "Up"}
+if ($wifi) {
+
+    Write-Host "wifi check passed"
+}
+else {
+    Write-Host "Please connect to the Internet before proceeding"
+    exit 
+}
+
+
 #Check Computer Type
 function compinfo{
     $script:comptype = (get-computerinfo).CsPCSystemType         # more simplified comp info
@@ -517,6 +529,5 @@ Stop-Transcript
     #make another file just for the HKU regedits incase it fails
     # Have a check for initialized profile (Check for the folder creation?
 # add txt file for needed commands to run (instructions)
-# add a check for if on wifi
 # Nuget update to do windows updates??
 # Add auto run to the VSA Download.
