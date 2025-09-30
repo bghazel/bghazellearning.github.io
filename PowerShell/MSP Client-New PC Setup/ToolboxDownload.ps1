@@ -6,12 +6,6 @@ if (!([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]
     Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath';`""
     exit
 }
-<#
-Invoke-WebRequest -Uri https://raw.githubusercontent.com/thomasmaurer/demo-cloudshell/master/*.ps1 -OutFile .\helloworld.ps1
-
-https://github.com/bghazel/bghazellearning.github.io/blob/main/PowerShell/Toolbox/WingetInstall.ps1
-https://raw.githubusercontent.com/bghazel/bghazellearning.github.io/refs/heads/main/PowerShell/Toolbox/WingetInstall.ps1
-#>
 
 #Create Toolbox Folder
 $path = "C:\Toolbox"
