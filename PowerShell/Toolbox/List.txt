@@ -1,2 +1,2 @@
-WingetInstall
-dism-sfc
+WingetInstall.ps1
+dism-sfc.ps1
