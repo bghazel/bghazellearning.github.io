@@ -27,7 +27,7 @@ $script:datetime = $null
 $wifi = Get-NetAdapter | Where-Object {$_.Status -eq "Up"}
 if ($wifi) {
 
-    Write-Host "wifi check passed"
+    Write-Host "Internet check passed"
 }
 else {
     Write-Host "Please connect to the Internet before proceeding"
@@ -169,7 +169,8 @@ Set-ItemProperty -Path $UACPath -Name "PromptOnSecureDesktop" -Value "0"
 Set-ItemProperty -Path $UACPath -Name "ConsentPromptBehaviorAdmin" -Value "0"
 
 #Show More Options
-$newoptionspath = "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"
+#$newoptionspath = "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"      ################################################################# This is the old set path for current user, changed to Regloaded select user
+$newoptionspath = "HKU:\$($sid)\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"
 New-Item -Path $newoptionspath -Force
 Set-ItemProperty -Path $newoptionspath -Name "(Default)" -Value ""
 Stop-Process -Name explorer -Force 
@@ -190,8 +191,8 @@ $maintenancepath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\
 Set-ItemProperty -Path $maintenancepath -Name "Activation Boundary" -Value "2001-01-01T02:00:00"
 
 #Taskbar Settings
-$registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-$userregpath = "HKU:\$($sid)\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+$registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" ######################################################
+$userregpath = "HKU:\$($sid)\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"   ########################################################
 $Al = "TaskbarAl" # Shift Start Menu Left 
 $value = "0"
 
@@ -204,8 +205,8 @@ Set-ItemProperty -Path $logdiscpath -Name "legalnoticecaption" -Value "Important
 Set-ItemProperty -Path $logdiscpath -Name "legalnoticetext" -Value "ALL COMPUTERS SHOULD ALWAYS BE KEPT POWERED ON WHENEVER POSSIBLE.  You can log out of Windows, but never Shut Down your computer overnight or over a weekend.  Tech Wizards performs automated and manual maintenance procedures and updates to your computer during evening and weekend hours, and if your computer is powered down, asleep, or in hibernation mode then we cannot perform these functions to keep your PC running at optimal performance and maximum speed.  Your monitor will automatically go dark after 15 minutes of computer inactivity.  Move your mouse or press any key to return to the Windows Desktop.  After 30 minutes of inactivity, you will need to enter your computer password (or PIN) to return to the Windows Desktop. You can power off your monitor if you want to, but there is no need to do so.  If this is a laptop computer, it is understood that this is a mobile device. Obviously, it will not always be powered on and connected to the Internet, especially when it is in transit.  But whenever possible, please keep your laptop plugged in, awake, and connected to the Internet so we can perform important maintenance and update procedures.  Thank you for helping Tech Wizards keep your company's network and computers working efficiently."
 
 #Stop Widget Popup
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force
-Set-ItemProperty -Path "HKU:\$($sid)\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force     #######################################################
+Set-ItemProperty -Path "HKU:\$($sid)\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force      ###############################################
 
 }
   
@@ -431,6 +432,7 @@ switch ($script:company) {
 # Run the download if a URL was set
 if ($url) {
     Invoke-WebRequest -Uri $url -OutFile "C:\Users\$($script:enduser)\Downloads\VSAInstaller.msi"
+    Start-Process -FilePath "C:\Users\$($script:enduser)\Downloads\VSAInstaller.msi" -ArgumentList '/i "C:\Users\$($script:enduser)\Downloads\VSAInstaller.msi" /qb' -Wait  ##########
 }
 if($bkg){
     Invoke-WebRequest -Uri $bkg -OutFile "C:\Users\$($script:enduser)\Downloads\wallpaper.bmp"
@@ -438,9 +440,9 @@ if($bkg){
     #Set Wallpaper
     $wallpaperPath = "C:\Users\$($script:enduser)\Downloads\wallpaper.bmp"
 
-    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\" -Name "WallPaper" -Value $wallpaperPath
-    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\" -Name "WallpaperStyle" -Value 0
-    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\" -Name "TileWallpaper" -Value 0
+    Set-ItemProperty -Path "HKU:\$($sid)\Control Panel\Desktop\" -Name "WallPaper" -Value $wallpaperPath       ################################################################################ Set each of these from HKCU:\ to HKU:\$($sid)
+    Set-ItemProperty -Path "HKU:\$($sid)\Control Panel\Desktop\" -Name "WallpaperStyle" -Value 0       ################################################################################
+    Set-ItemProperty -Path "HKU:\$($sid)\Control Panel\Desktop\" -Name "TileWallpaper" -Value 0        ################################################################################    
       # Refresh the desktop to apply the changes without rebooting
     RUNDLL32.EXE user32.dll, UpdatePerUserSystemParameters 1, True
 }
@@ -495,21 +497,21 @@ $functionselection = Read-Host -Prompt "Would you Like to perform the Cleanup/Tu
 
 #Call Functions
 Applysettings
-Write-Host "TEST6"
+Write-Host "TESTsettings"
 VSAbkg
-Write-Host "TEST7"
+Write-Host "TESTvsa"
 wingetinstall
-Write-Host "TEST8"
+Write-Host "TESTwingetinstall"
 standardwinget
-Write-Host "TEST9"
+Write-Host "TESTstandardwinget"
 standardweb
-Write-Host "TEST10"
+Write-Host "TESTstandard web"
 wingetupgrade
-Write-Host "TEST11"
+Write-Host "TESTwingetupgrade"
 diskcleanup
-Write-Host "TEST12"
+Write-Host "TESTdiskcleanup"
 sfcdism
-Write-Host "TEST13"
+Write-Host "TESTsfcdism"
 PCInfotxt
 
 
@@ -527,7 +529,10 @@ Stop-Transcript
  # initializing the new users profile did not work. So regedit settings didnt activate
     # Seperate out HKLM and HKU/$sid regedits. 
     #make another file just for the HKU regedits incase it fails
+        # Maybe was just that there were still HKCU instead of HKU:\$($sid)?
     # Have a check for initialized profile (Check for the folder creation?
 # add txt file for needed commands to run (instructions)
 # Nuget update to do windows updates??
-# Add auto run to the VSA Download.
+
+
+
