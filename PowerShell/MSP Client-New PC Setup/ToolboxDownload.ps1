@@ -12,14 +12,22 @@ Invoke-WebRequest -Uri https://raw.githubusercontent.com/thomasmaurer/demo-cloud
 https://github.com/bghazel/bghazellearning.github.io/blob/main/PowerShell/Toolbox/WingetInstall.ps1
 https://raw.githubusercontent.com/bghazel/bghazellearning.github.io/refs/heads/main/PowerShell/Toolbox/WingetInstall.ps1
 #>
-read-Host "TEST1"
 
-#Pull List File from Github
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bghazel/bghazellearning.github.io/refs/heads/main/PowerShell/Toolbox/List.txt" -OutFile "C:\Toolbox\List.txt"
-
-Get-Content C:\Toolbox\List.txt | ForEach-Object {
-    Read-Host "Processing Line $_"
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bghazel/bghazellearning.github.io/refs/heads/main/PowerShell/Toolbox/$_.ps1" -OutFile "C:\Toolbox\$_"
+#Create Toolbox Folder
+$path = "C:\Toolbox"
+If(!(test-path -PathType container $path))
+{
+      New-Item -ItemType Directory -Path $path | Out-Null
 }
 
+#Pull List File from Github
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bghazel/bghazellearning.github.io/refs/heads/main/PowerShell/Toolbox/List.txt" -OutFile "C:\Toolbox\_List.txt"
+
+#Parse each line of list for tool name
+Get-Content C:\Toolbox\_List.txt | ForEach-Object {
+    Write-Host "Processing Line $_"
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bghazel/bghazellearning.github.io/refs/heads/main/PowerShell/Toolbox/$_" -OutFile "C:\Toolbox\$_"
+}
+
+Read-Host "ToolBox Creation Complete"
 

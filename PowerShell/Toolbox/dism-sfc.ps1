@@ -10,9 +10,9 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 #-argumentlist allows for entry of the various options a program might have. -verb RunAs to run the called program as admin.
 
 Start-Process -FilePath "dism.exe" -ArgumentList "/online /cleanup-image /restorehealth" -Wait -Verb RunAs
-
+Read-Host "DISM"
 Start-Process -FilePath "${env:Windir}\System32\SFC.EXE" -ArgumentList "/scannow" -Wait -Verb RunAs
-
+Read-Host "SFC"
 Read-Host -Prompt "Scans have finished running. Press Enter to close this window now"
 
 #-RedirectStandardOutput C:\
