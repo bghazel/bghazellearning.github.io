@@ -529,8 +529,10 @@ Stop-Transcript
  # initializing the new users profile did not work. So regedit settings didnt activate
     # Seperate out HKLM and HKU/$sid regedits. 
     #make another file just for the HKU regedits incase it fails
-        # Maybe was just that there were still HKCU instead of HKU:\$($sid)?
+        # Maybe was just that there were still HKCU instead of HKU:\$($sid)?        Made this change
     # Have a check for initialized profile (Check for the folder creation?
+
+
 # add txt file for needed commands to run (instructions)
 # Nuget update to do windows updates??
 
