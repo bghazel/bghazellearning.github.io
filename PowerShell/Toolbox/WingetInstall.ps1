@@ -1,5 +1,5 @@
 # Goal: One button to install latest winget version and update all winget apps
-
+Start-Transcript -Path "C:\Toolbox\Logs\Wingetinstall.log" -Append
 # Self Elevate
 if (!([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath';`""

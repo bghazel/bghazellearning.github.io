@@ -20,6 +20,13 @@ If(!(test-path -PathType container $path))
       New-Item -ItemType Directory -Path $path | Out-Null
 }
 
+#Create Toolbox Log Folder
+$path = "C:\Toolbox\Logs"
+If(!(test-path -PathType container $path))
+{
+      New-Item -ItemType Directory -Path $path | Out-Null
+}
+
 #Pull List File from Github
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bghazel/bghazellearning.github.io/refs/heads/main/PowerShell/Toolbox/List.txt" -OutFile "C:\Toolbox\_List.txt"
 
