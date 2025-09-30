@@ -33,9 +33,9 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bghazel/bghazellearnin
 #Parse each line of list for tool name
 Get-Content C:\Toolbox\_List.txt | ForEach-Object {
     $line = $_ -replace '\(.*?\)', ''
-    Write-Host "Processing Line $line"
+    Write-Host "Processing $line"
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bghazel/bghazellearning.github.io/refs/heads/main/PowerShell/Toolbox/$line" -OutFile "C:\Toolbox\$line"
 }
 
-Read-Host "ToolBox Creation Complete"
+Write-Host "ToolBox Creation Complete"
 
