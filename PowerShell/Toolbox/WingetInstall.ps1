@@ -37,3 +37,5 @@ function wingetupgrade {
 # Run the functions
 wingetinstall
 wingetupgrade
+
+Stop-Transcript

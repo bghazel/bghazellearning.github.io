@@ -1,6 +1,6 @@
 #I'd like to have this one run the windows disk cleanup program with all boxes selected automatically then close after a prompt letting the user know its finished
 #The hope is to reduce the steps in our final cleanup/tuneup checklist into a single powershell script
-
+Start-Transcript -Path "C:\Toolbox\Logs\DiskCleanup.log" -Append
 
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Start-Process PowerShell -Verb RunAs "-NoProfile -ExecutionPolicy Bypass -Command `"cd '$pwd'; & '$PSCommandPath';`"";
@@ -52,3 +52,5 @@ Start-Process -FilePath "C:\Program Files (x86)\Wise\Wise Registry Cleaner\Wiser
 
 
 Read-Host -prompt "Disk Cleanup Complete: Press Enter to exit"
+
+Stop-Transcript

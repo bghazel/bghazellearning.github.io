@@ -1,3 +1,5 @@
-WingetInstall.ps1 (Checks if Winget is Installed and installs it if not, then runs the upgrade function to update any apps on the computer that can be through Winget)
+WingetInstall.ps1 (Checks if Winget is installed and installs it if not, then runs the upgrade function to update any apps on the computer that can be through Winget)
 dism-sfc.ps1 (Runs DISM and SFC scans in succession)
 diskcleanup.ps1 (Runs Windows Disk Cleaner, Wise Disk Cleaner, Wise Registry Cleaner, Optimizes/Defrags the drive, Clears the recycle bin, ###DOWNLOADS FOLDER###, and recent item list.)
+OfficeFullRepair.ps1 (Runs Microsoft Offices Full Repair, helps fix outlook)
+OfficeQuickRepair.ps1 (Runs Microsoft Offices Quick Repair, helps fix outlook)

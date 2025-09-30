@@ -18,3 +18,5 @@ Read-Host "SFC"
 Read-Host -Prompt "Scans have finished running. Press Enter to close this window now"
 
 #-RedirectStandardOutput C:\
+
+Stop-Transcript
