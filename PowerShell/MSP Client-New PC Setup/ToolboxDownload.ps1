@@ -18,8 +18,8 @@ read-Host "TEST1"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bghazel/bghazellearning.github.io/refs/heads/main/PowerShell/Toolbox/List.txt" -OutFile "C:\Toolbox\List.txt"
 
 Get-Content C:\Toolbox\List.txt | ForEach-Object {
-    Read-Host "processing Line $_"
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bghazel/bghazellearning.github.io/refs/heads/main/PowerShell/Toolbox/$_.ps1" -OutFile "C:\Toolbox\$_.ps1"
+    Read-Host "Processing Line $_"
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/bghazel/bghazellearning.github.io/refs/heads/main/PowerShell/Toolbox/$_.ps1" -OutFile "C:\Toolbox\$_"
 }
 
 
