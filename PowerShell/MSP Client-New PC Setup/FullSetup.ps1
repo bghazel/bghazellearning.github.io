@@ -119,7 +119,7 @@ $xmldoc.LoadXml($xmlstring)
 $outputpath = "C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\LayoutModification.xml"
 $xmldoc.Save($outputpath)
 
-#Create and Initialize User Profile
+<#Create and Initialize User Profile
 New-LocalUser -Name "$script:enduser" -Password $script:password -Description "$script:enduser's Profile"
 Add-LocalGroupMember -Group "Administrators" -Member "$script:enduser"             #Adding as admin
 
@@ -137,7 +137,7 @@ Add-LocalGroupMember -Group "Administrators" -Member "$script:enduser"          
   catch {
     Write-Host "Failed to initialize the user profile: $_"
   }
-
+#>
 #Reg Load
 $tempsid = Get-WmiObject Win32_UserAccount -Filter "Name = '$script:enduser'"
 $sid = $tempsid.sid
@@ -149,7 +149,7 @@ $regloadpath = "C:\Users\$script:enduser\NTUSER.DAT"
   else {
         reg load "HKU\$sid" "$regloadpath"
   }
-
+#New-PSDrive -PSProvider Registry -Name HKU -Root HKEY_USER     #############
 #Setting Computer Name
 Rename-Computer -NewName "$compname"
 
@@ -531,9 +531,13 @@ Stop-Transcript
     #make another file just for the HKU regedits incase it fails
         # Maybe was just that there were still HKCU instead of HKU:\$($sid)?        Made this change
     # Have a check for initialized profile (Check for the folder creation?
+    # Just start with making end user profile? then have script create twiz
+    #Possilby just a reg load issue? https://stackoverflow.com/questions/58059948/cannot-map-hku-registry-hive-with-powershell
 
 
 # add txt file for needed commands to run (instructions)
+    #allow for unsigned scripts
+    #run through ps (powershell.exe "path")
 # Nuget update to do windows updates??
 
 
