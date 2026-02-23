@@ -1,0 +1,5 @@
+This is a guide for explaining and running the full PC setup script.
+
+The script is still a WiP so there are some less automatic portions of it and it will require some entries by the technician after it has been started.
+
+It will ask for permissions a couple times like when updating or when deleting certain items.
