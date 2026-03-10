@@ -1,5 +1,3 @@
-#Currently on page 69
-
 #Providers
     #an adapter designed to make some data look like a drive.
     #What Providers exists
@@ -36,3 +34,10 @@
 
 #can set location to a registry path. Then empty get-children will just provide info on current location
 #End of registry paths have the actual keys as propertys. So you get to the end folder(item) then change the property 
+
+#Lab
+    #cd to the hkcu folder. did a few get-childitems to double check. did Set-ItemPropert -path Advanced -name DontPrettyPath -value 1. Then did a get-itemproperty to check that it changed
+    #cd to c:\ then mkdir Labs then new-item -itemtype file -name test.txt
+    #set item doesnt work bc the provider doesnt accept that kind of cmdlet
+    #set-location env:\ then get-childitem *temp* value shows  C:\Users\Ben\AppData\Local\Temp ? Is this what they are after?
+    # Filter applys filter when the cmdlet gets the objects rather than after theyre retrieved and is set all at once. Include only works when the command includes the contentts of an item. Exclude only applys after the inclusion has already happened. ******** include and exclude need -recurse. filter goes through the provider and not all providers support it.
