@@ -49,3 +49,5 @@ This is my github Repository where I am learning powershell and other tools to f
 <br><br>
 10/8/25
 <br>    - Been some various small edits to the full script as I've had the chance to test it out on some computers. Main issue is initializing and loading hte registry of the newly created user. It also doesn't seem to recognize HKU when I ran it last. Also created an install script for parsec so that we dont have anyone mistakenly downloading per user instead of per computer as that forces us to remote in to end users computers to wake them up. I have noticed that making quick edits and reading how a script works has vastly improved. Now I can usually find some script and understand what it does and how it works!
+
+test
