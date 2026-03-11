@@ -1,5 +1,3 @@
-#Page 100
-
 #Microsoft Management Console (MMC)
     #Used it plenty just didn't know what its base was called.
     #snapins are what the different modules are called.
