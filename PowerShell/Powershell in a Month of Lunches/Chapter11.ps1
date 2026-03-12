@@ -49,6 +49,6 @@
         #Use Measure-object to Calculate the numeric properties of objects, and the characters, words, and lines in string objects, such as files of text.
         #Do iterative testing. Like you can slowly add on to your script while testing each step of the way.
 
-#Lab
+#Lab PAGE 165
     #1. Get-NetAdapter | Where-Object -filter {$_.virtual -eq $true}
     #2. Get-DnsClientCache -type A,AAAA         *****************check the main cmdlet dont bury head in the new stuff only.
