@@ -50,5 +50,9 @@
         #Do iterative testing. Like you can slowly add on to your script while testing each step of the way.
 
 #Lab PAGE 165
-    #1. Get-NetAdapter | Where-Object -filter {$_.virtual -eq $true}
+    #1. Get-NetAdapter | Where-Object {$_.virtual -eq $true}
     #2. Get-DnsClientCache -type A,AAAA         *****************check the main cmdlet dont bury head in the new stuff only.
+    #3. dir -path C:\Windows\System32\*.exe | where {$_.Length -gt 5MB}
+    #4. Get-HotFix | where -Filter {$_.description -eq 'Security Update'}
+    #5. Get-HotFix -Description 'Update' | where {$_.InstalledBy -eq 'NT Authority\System'}      **********same dang issue of only doing the one cmd. Remember to test the base command to see if you can skip any later filtering.
+    #6. gps | where {($_.Name -eq 'conhost') -or ($_.Name -eq 'svchost')}        **********gps -Name conhost, svchost there was a simpler way......
