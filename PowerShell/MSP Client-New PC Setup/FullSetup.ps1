@@ -533,7 +533,7 @@ Stop-Transcript
     # Have a check for initialized profile (Check for the folder creation?
     # Just start with making end user profile? then have script create twiz
     #Possilby just a reg load issue? https://stackoverflow.com/questions/58059948/cannot-map-hku-registry-hive-with-powershell
-
+#need to go through and make it more standardized for pwrshell. Lots of buggy bits and not making use of piping much.
 
 # add txt file for needed commands to run (instructions)
     #allow for unsigned scripts
