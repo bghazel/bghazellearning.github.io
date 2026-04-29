@@ -324,7 +324,7 @@ Get-WmiObject win32_bios | Select-Object SerialNumber >> C:\pcinfo.txt
 systeminfo >> C:\pcinfo.txt
 }  
 
-#VSA Agent + Wallpaper Install Script
+#VSA Agent + Wallpaper Install Script #######  perfect for the scripts in rmm
 function VSAbkg{
     $script:company = Read-Host -Prompt "Company code shorthand:  (ie: PAL, VLT, AUTH \\ exit to end)"
 
@@ -429,7 +429,7 @@ switch ($script:company) {
     }
 }
 
-# Run the download if a URL was set
+# Run the download if a URL was set ################################
 if ($url) {
     Invoke-WebRequest -Uri $url -OutFile "C:\Users\$($script:enduser)\Downloads\VSAInstaller.msi"
     Start-Process -FilePath "C:\Users\$($script:enduser)\Downloads\VSAInstaller.msi" -ArgumentList '/i "C:\Users\$($script:enduser)\Downloads\VSAInstaller.msi" /qb' -Wait  ##########
