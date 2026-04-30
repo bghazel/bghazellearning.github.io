@@ -6,8 +6,15 @@ Plan
 
 Watch through Jeremy IT Lab following along with the labs (goal is done by 5/31) 
     -Full watch through is 3365 minutes or 56 hours
-    -Start compiling the anki flash cards.
-Watch through it again following along with the labs + taking notes.
+    -Start compiling the anki flash cards
+        -Add them to a collective deck when finished with each episode
+        -Run whenever available till finished.
+
+Take Practice Exam
+    - note which broad topics need work
+Watch through it again taking notes on fuzzy topics. do labs on own but check with video on each step.
+
+Take Practice Exam
 
 Watch through it 1 more time and do labs on my own and check once finished.
 
@@ -17,7 +24,21 @@ Evaluate and touch up from there.
 
 
 
+
+
+
+
+
+
+Other Resources
+    https://subnetipv4.com/
+
+
+
+Template
+
 Time Left: 3305/3365
+xxx% of the way through
 
 Watch #1
     Main:
