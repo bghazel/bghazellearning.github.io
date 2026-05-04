@@ -39,6 +39,7 @@ Template
 
 Time Left: 3305/3365
 xxx% of the way through
+Flashcards:
 
 Watch #1
     Main:
