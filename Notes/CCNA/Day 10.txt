@@ -1,0 +1,16 @@
+Time Left: 2936/3365 minutes
+12.749% of the way through
+Flashcards: yes
+
+Watch #1
+    Main:Done
+    Supplementary: definitely need to do many more rounds of flash card. the ipv4 header has many parts.
+    Lab:n/a
+Watch #2
+    Main:
+    Supplementary:
+    Lab:
+Watch #3
+    Main:
+    Supplementary:
+    Lab:
