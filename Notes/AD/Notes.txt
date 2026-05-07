@@ -1,0 +1,15 @@
+- turn on recycle bin in admin center
+- always turn on advanced features in the AD users and computers.
+- use the search feature to find users, rather than going through all of the OUs.
+- if hybrid setup you can edit exchange online email settings(like setup auto forwarding of a user or proxy addresses)
+    - done through entra id sync. 
+
+GPO
+    - can either be computer based or user based
+    - can be policy or preference
+        -policy - user does not get an option
+        -preference - a user can turn it off if they want
+    -gp update /force  
+        - run on client pc to update for new gpo
+    -gpresult /r /scope:computer
+        -shows what gpos are being applied.
