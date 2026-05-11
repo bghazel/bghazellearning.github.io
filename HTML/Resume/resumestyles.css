@@ -1,4 +1,18 @@
+/*setting whole thing to be centered on page*/
 
+html, body {
+    height: 100%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+    vertical-align: top;
+}
 
 
 /* setting class selector for each section type*/
@@ -24,3 +38,4 @@
 .bulletp{
     font-size: 12px;
 }
+

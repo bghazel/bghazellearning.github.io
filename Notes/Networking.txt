@@ -1,0 +1,13 @@
+This is just a file for my notes on some networking fundamentals that I wanted to brush up on. 
+
+OSI Model
+    7. Application - Allows access to network services. This is the layer where file services, print services and other applications opertate. Essentially the End User layer [actual services that communicate directly with applications]
+    6. Presentation - This is translator? it reworks data into readable and properly formatted data for other the application layer[The translator]
+    5. Session - manages connections between local nad remote applications. Something of a conductor or controller. Deals with authentication/authroization and the starting and stopping of sessions(connections) [The phone operator/connector]
+    4. Transport - deals with transmitting and receiving data. depending on direction it breaks up the data into smaller parts or combines them again. This is where tcp check for complete data transfer occurs.[the QA center of the network]
+    3. Network - Traffic Director. Forms data into packets then it decides the best way for data(packets) to go. picks the best network path for data to flow through based on network conditions/priorities. Deals with packet switching,routing and controlling congestion of data.[the logic of the network in an office]
+    2. Data Link - Forms data in to chunks called frames. Tags the data with its important information. Describes the MAC address for data to go to. similar to layer 3 but more physical(lan) rather than inter-network. Think switches/nodes. split between Media Access Control(MAC) and Logical Link Control (LLC)[the topology of an office]
+        - LLC deals with data link communications Mostly in logic and protocol related aspects. Identifies the protocol of incoming data(ie: IP), then adds identifiers to the data so the next in line knows how to handle it. This allows multiple protocols on a single link. can be partially QA, checking for errors or frame losses. can act as a flow regulator, reducing incoming data if need. (not really anymore though as thats usually handled higher up)
+        - MAC cheks for data collions and manages the actual physical addresses(MAC address) of devices.
+    1. Physical - Describes how data gets transmitted over physical communication mediums. Like how fast the light/electricity pulses in a cable to portray a piece of data. Decides whether data travels in one direction or both, It also relates electrical, optical, mechanical and functional interfaces to the Cable.[what happens in the cable]
+

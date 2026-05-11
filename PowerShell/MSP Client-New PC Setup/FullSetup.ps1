@@ -4,8 +4,9 @@
 Applying our standard windows settings(Comp Name, Comp Description, Disabling Bitlocker, Setting UAC, Disabling Show more Options, Applying Power Settings, Scheduling Windows Auto Maintenence and creating the User Profile)
 Performing Our Cleanup/Tuneup Process including winget and windows updates, diskcleanup(w/wise cleaners), SFC/Dism Scanes.
 #>
+Start-Transcript -Path "C:\SetupLogs\SetupTranscript.log" -Append
 
-
+Write-Host "TEST1"
 
 #Self Elevate
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
@@ -13,7 +14,7 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
     exit;
 }
 
-
+Write-Host "TEST2"
     #\\\IT Glue Info TXT\\\
 #Defining Variables
 $script:comptype = $null
@@ -21,6 +22,18 @@ $script:compmake = $null
 $script:compmodel = $null
 $script:serialnumber = $null
 $script:datetime = $null
+
+#Internet Connection Check
+$wifi = Get-NetAdapter | Where-Object {$_.Status -eq "Up"}
+if ($wifi) {
+
+    Write-Host "Internet check passed"
+}
+else {
+    Write-Host "Please connect to the Internet before proceeding"
+    exit 
+}
+
 
 #Check Computer Type
 function compinfo{
@@ -39,7 +52,7 @@ function compinfo{
 }
 
 
-
+Write-Host "TEST3"
 #Required Inputs
 Write-Host "Welcome to the MSP Client: New PC Setup Checklist Script"
 Write-Host "All information needed to put into IT Glue will be put into ITGlueinfo.txt in the C Drive"
@@ -50,12 +63,12 @@ Write-Host "All information needed to put into IT Glue will be put into ITGluein
 
 #Call Function
   compinfo
-
+Write-Host "TEST4"
 #Writing to file
 "Title: MSP Client: New PC Setup - <$compname> - <$script:enduser>" >> C:\ITGlueInfo.txt
 "Technician: $technician" >> C:\ITGlueInfo.txt
 "End User: $script:enduser" >> C:\ITGlueInfo.txt
-"Date Setup Started $datetime" >> C:\ITGlueInfo.txt
+"Date Setup Started $script:datetime" >> C:\ITGlueInfo.txt
 "Computer Type: $script:comptype" >> C:\ITGlueinfo.txt
 "Computer Info: Make: $compmake, Model: $compmodel, Serial Number: $serialnumber" >> C:\ITGlueInfo.txt
 "Computer Name: $compname" >> C:\ITGlueInfo.txt
@@ -64,7 +77,7 @@ Write-Host "All information needed to put into IT Glue will be put into ITGluein
     [Runtime.InteropServices.Marshal]::SecureStringToBSTR($script:password)
   )
 "Password: $unsecurePassword" >> C:\ITGlueInfo.txt
-
+Write-Host "TEST5"
 #Removing anything after first space in enduser.
 $script:enduser = ($script:enduser -split ' ', 2)[0]
 
@@ -106,7 +119,7 @@ $xmldoc.LoadXml($xmlstring)
 $outputpath = "C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\LayoutModification.xml"
 $xmldoc.Save($outputpath)
 
-#Create and Initialize User Profile
+<#Create and Initialize User Profile
 New-LocalUser -Name "$script:enduser" -Password $script:password -Description "$script:enduser's Profile"
 Add-LocalGroupMember -Group "Administrators" -Member "$script:enduser"             #Adding as admin
 
@@ -124,7 +137,7 @@ Add-LocalGroupMember -Group "Administrators" -Member "$script:enduser"          
   catch {
     Write-Host "Failed to initialize the user profile: $_"
   }
-
+#>
 #Reg Load
 $tempsid = Get-WmiObject Win32_UserAccount -Filter "Name = '$script:enduser'"
 $sid = $tempsid.sid
@@ -136,7 +149,7 @@ $regloadpath = "C:\Users\$script:enduser\NTUSER.DAT"
   else {
         reg load "HKU\$sid" "$regloadpath"
   }
-
+#New-PSDrive -PSProvider Registry -Name HKU -Root HKEY_USER     #############
 #Setting Computer Name
 Rename-Computer -NewName "$compname"
 
@@ -156,7 +169,8 @@ Set-ItemProperty -Path $UACPath -Name "PromptOnSecureDesktop" -Value "0"
 Set-ItemProperty -Path $UACPath -Name "ConsentPromptBehaviorAdmin" -Value "0"
 
 #Show More Options
-$newoptionspath = "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"
+#$newoptionspath = "HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"      ################################################################# This is the old set path for current user, changed to Regloaded select user
+$newoptionspath = "HKU:\$($sid)\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32"
 New-Item -Path $newoptionspath -Force
 Set-ItemProperty -Path $newoptionspath -Name "(Default)" -Value ""
 Stop-Process -Name explorer -Force 
@@ -177,8 +191,8 @@ $maintenancepath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\
 Set-ItemProperty -Path $maintenancepath -Name "Activation Boundary" -Value "2001-01-01T02:00:00"
 
 #Taskbar Settings
-$registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-$userregpath = "HKU:\$($sid)\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+$registryPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" ######################################################
+$userregpath = "HKU:\$($sid)\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"   ########################################################
 $Al = "TaskbarAl" # Shift Start Menu Left 
 $value = "0"
 
@@ -191,8 +205,8 @@ Set-ItemProperty -Path $logdiscpath -Name "legalnoticecaption" -Value "Important
 Set-ItemProperty -Path $logdiscpath -Name "legalnoticetext" -Value "ALL COMPUTERS SHOULD ALWAYS BE KEPT POWERED ON WHENEVER POSSIBLE.  You can log out of Windows, but never Shut Down your computer overnight or over a weekend.  Tech Wizards performs automated and manual maintenance procedures and updates to your computer during evening and weekend hours, and if your computer is powered down, asleep, or in hibernation mode then we cannot perform these functions to keep your PC running at optimal performance and maximum speed.  Your monitor will automatically go dark after 15 minutes of computer inactivity.  Move your mouse or press any key to return to the Windows Desktop.  After 30 minutes of inactivity, you will need to enter your computer password (or PIN) to return to the Windows Desktop. You can power off your monitor if you want to, but there is no need to do so.  If this is a laptop computer, it is understood that this is a mobile device. Obviously, it will not always be powered on and connected to the Internet, especially when it is in transit.  But whenever possible, please keep your laptop plugged in, awake, and connected to the Internet so we can perform important maintenance and update procedures.  Thank you for helping Tech Wizards keep your company's network and computers working efficiently."
 
 #Stop Widget Popup
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force
-Set-ItemProperty -Path "HKU:\$($sid)\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force     #######################################################
+Set-ItemProperty -Path "HKU:\$($sid)\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarOpenOnHover" -Value 0 -Force      ###############################################
 
 }
   
@@ -310,7 +324,7 @@ Get-WmiObject win32_bios | Select-Object SerialNumber >> C:\pcinfo.txt
 systeminfo >> C:\pcinfo.txt
 }  
 
-#VSA Agent + Wallpaper Install Script
+#VSA Agent + Wallpaper Install Script #######  perfect for the scripts in rmm
 function VSAbkg{
     $script:company = Read-Host -Prompt "Company code shorthand:  (ie: PAL, VLT, AUTH \\ exit to end)"
 
@@ -415,9 +429,10 @@ switch ($script:company) {
     }
 }
 
-# Run the download if a URL was set
+# Run the download if a URL was set ################################
 if ($url) {
     Invoke-WebRequest -Uri $url -OutFile "C:\Users\$($script:enduser)\Downloads\VSAInstaller.msi"
+    Start-Process -FilePath "C:\Users\$($script:enduser)\Downloads\VSAInstaller.msi" -ArgumentList '/i "C:\Users\$($script:enduser)\Downloads\VSAInstaller.msi" /qb' -Wait  ##########
 }
 if($bkg){
     Invoke-WebRequest -Uri $bkg -OutFile "C:\Users\$($script:enduser)\Downloads\wallpaper.bmp"
@@ -425,9 +440,9 @@ if($bkg){
     #Set Wallpaper
     $wallpaperPath = "C:\Users\$($script:enduser)\Downloads\wallpaper.bmp"
 
-    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\" -Name "WallPaper" -Value $wallpaperPath
-    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\" -Name "WallpaperStyle" -Value 0
-    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\" -Name "TileWallpaper" -Value 0
+    Set-ItemProperty -Path "HKU:\$($sid)\Control Panel\Desktop\" -Name "WallPaper" -Value $wallpaperPath       ################################################################################ Set each of these from HKCU:\ to HKU:\$($sid)
+    Set-ItemProperty -Path "HKU:\$($sid)\Control Panel\Desktop\" -Name "WallpaperStyle" -Value 0       ################################################################################
+    Set-ItemProperty -Path "HKU:\$($sid)\Control Panel\Desktop\" -Name "TileWallpaper" -Value 0        ################################################################################    
       # Refresh the desktop to apply the changes without rebooting
     RUNDLL32.EXE user32.dll, UpdatePerUserSystemParameters 1, True
 }
@@ -466,7 +481,7 @@ function standardweb{
 
 
 
-
+<#
    
 $functionselection = Read-Host -Prompt "Would you Like to perform the Cleanup/Tuneup script? [Winget and Windows Updates, Disk Cleanup, SFC/DISM, PCInfo Text File Creation](Y/N)"
    if ($functionselection -eq "Y") {
@@ -478,8 +493,26 @@ $functionselection = Read-Host -Prompt "Would you Like to perform the Cleanup/Tu
    Write-Host "" #Used to break up the repeats
 
 
+#>
 
-
+#Call Functions
+Applysettings
+Write-Host "TESTsettings"
+VSAbkg
+Write-Host "TESTvsa"
+wingetinstall
+Write-Host "TESTwingetinstall"
+standardwinget
+Write-Host "TESTstandardwinget"
+standardweb
+Write-Host "TESTstandard web"
+wingetupgrade
+Write-Host "TESTwingetupgrade"
+diskcleanup
+Write-Host "TESTdiskcleanup"
+sfcdism
+Write-Host "TESTsfcdism"
+PCInfotxt
 
 
 #Reg Unload
@@ -488,3 +521,24 @@ if (Test-Path "HKU\$sid") {
 }
 
 Read-Host -Prompt "Thank you for using Ben's TechWizard MSP Client PC Setup Script (Press Enter to Exit)"
+Stop-Transcript
+
+
+
+#NOTES
+ # initializing the new users profile did not work. So regedit settings didnt activate
+    # Seperate out HKLM and HKU/$sid regedits. 
+    #make another file just for the HKU regedits incase it fails
+        # Maybe was just that there were still HKCU instead of HKU:\$($sid)?        Made this change
+    # Have a check for initialized profile (Check for the folder creation?
+    # Just start with making end user profile? then have script create twiz
+    #Possilby just a reg load issue? https://stackoverflow.com/questions/58059948/cannot-map-hku-registry-hive-with-powershell
+#need to go through and make it more standardized for pwrshell. Lots of buggy bits and not making use of piping much.
+
+# add txt file for needed commands to run (instructions)
+    #allow for unsigned scripts
+    #run through ps (powershell.exe "path")
+# Nuget update to do windows updates??
+
+
+
