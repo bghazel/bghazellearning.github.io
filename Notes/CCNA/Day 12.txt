@@ -1,11 +1,11 @@
-Time Left: 2905/3365 minutes
-13.670% of the way through
-Flashcards: yes
+Time Left: 2870/3365 minutes
+14.710% of the way through
+Flashcards: 
 
 Watch #1
     Main:
-    Supplementary:
-    Lab:Done
+    Supplementary: 
+    Lab: 
 Watch #2
     Main:
     Supplementary:
